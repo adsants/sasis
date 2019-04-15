@@ -1,0 +1,184 @@
+<?php
+class Template_view extends CI_Controller {
+    protected $_ci;
+    
+    function __construct(){
+        $this->_ci = &get_instance();
+
+    }
+    
+    function base_url_admin(){		
+		return base_url()."backoffice";       
+	}
+	function base_url_siswa(){		
+		return base_url()."siswa";       
+	}
+	
+	function load_view($content_view = null){		
+		$this->_ci->load->model('profil_aplikasi_model');	
+		$this->_ci->dataProfilAplikasi = $this->_ci->profil_aplikasi_model->getData();
+		
+		$this->_ci->menu 		= false;
+		$this->_ci->siswa		= true;
+		$this->_ci->menu_siswa	= false;
+		$this->_ci->load->view('template/header_view');
+		$this->_ci->load->view($content_view);
+		$this->_ci->load->view('template/footer_view');        
+	}
+	
+	function load_siswa_view($content_view = null){		
+		$this->_ci->load->model('profil_aplikasi_model');	
+		$this->_ci->dataProfilAplikasi = $this->_ci->profil_aplikasi_model->getData();
+		
+		$this->_ci->menu 		= false;
+		$this->_ci->siswa		= true;
+		$this->_ci->menu_siswa	= true;
+		$this->_ci->load->view('template/header_view');
+		$this->_ci->load->view($content_view);
+		$this->_ci->load->view('template/footer_view');        
+	}
+	
+	
+	function load_admin_view($content_view = null){
+		
+		$this->_ci->load->model('profil_aplikasi_model');	
+		$this->_ci->dataProfilAplikasi = $this->_ci->profil_aplikasi_model->getData();
+		
+		$this->_ci->menu 	= true;
+		$this->_ci->siswa	= false;
+		$this->_ci->menu_siswa	= false;
+		$this->_ci->load->view('template/header_slide_kiri_view');
+		$this->_ci->load->view($content_view);
+		$this->_ci->load->view('template/footer_slide_kiri_view');       
+	}
+	
+	function cek_downline_menu($id_menu){		
+		$this->_ci->load->model('m_menu_model');
+		
+		$whereDownlineMenu 	= array('id_parent_menu' => $id_menu);
+		$dataTopMenu  		= $this->_ci->m_menu_model->showData($whereDownlineMenu);
+		
+		return count($dataTopMenu);		
+	}
+	
+	function load_menu($id_kategori_user){
+		if(!$id_kategori_user){
+			redirect('admin');
+		}
+		
+		$this->_ci->load->model('t_hak_akses_model');
+		
+		$whereTopMenu 	= array('t_hak_akses.id_kategori_user' => $id_kategori_user, 'm_menu.id_parent_menu' => '0');
+		$dataTopMenu  	= $this->_ci->t_hak_akses_model->showData($whereTopMenu );
+		
+		$menuHtml		=	"";
+			foreach($dataTopMenu as $data){
+				$cekDownlineMenu = $this->cek_downline_menu( $data->id_menu );
+				//var_dump($cekDownlineMenu); 
+				
+				if($cekDownlineMenu == '0'){
+					$urlTopMenu	=	base_url()."".$data->link_menu;
+					$classTopMenuHref	=	"nav-link";
+					$classTopMenuLi		=	"";
+					
+				}
+				else{
+					$urlTopMenu			=	"javascript:;";
+					$classTopMenuLi		=	"menu-dropdown classic-menu-dropdown";
+					$classTopMenuHref	=	"";
+				}
+				
+				$menuHtml .= "
+				<li aria-haspopup='true' class='".$classTopMenuLi."'>
+					<a href='".$urlTopMenu."' class='".$classTopMenuHref."'>
+						<i class='".$data->icon_menu."'></i> ".$data->nm_menu."
+					</a>
+				";
+					
+					if($cekDownlineMenu > 0){
+						$whereSecondMenu 	= array('t_hak_akses.id_kategori_user' => $id_kategori_user, 'm_menu.id_parent_menu' => $data->id_menu);
+						$secondMenu  	= $this->_ci->t_hak_akses_model->showData($whereSecondMenu );
+						
+						//echo $this->_ci->db->last_query();
+						
+						$menuHtml		.=	'<ul class="dropdown-menu pull-left">';
+							foreach($secondMenu as $dataSecondMenu){
+								$cekDownlineSecondMenu = $this->cek_downline_menu( $dataSecondMenu->id_menu );
+								
+								if($cekDownlineSecondMenu == '0'){
+									$urlSecondMenu	=	base_url()."".$dataSecondMenu->link_menu;
+									$classSeMenuHref	=	"nav-link";
+									$classTopMenuLi		=	"";
+									
+								}
+								else{
+									$urlSecondMenu			=	"javascript:;";
+									$classTopMenuLi		=	"dropdown-submenu";
+									$classTopMenuHref	=	"";
+								}
+				
+								$menuHtml .= "
+								<li aria-haspopup='true' class='".$classTopMenuLi."'>
+									<a href='".$urlSecondMenu."' class='".$classTopMenuHref."'>
+										<i class='".$dataSecondMenu->icon_menu."'></i> ".$dataSecondMenu->nm_menu."
+									</a>
+								";
+									
+									
+									
+									if($cekDownlineSecondMenu > 0){
+										$whereThirdMenu 	= array('t_hak_akses.id_kategori_user' => $id_kategori_user, 'm_menu.id_parent_menu' => $dataSecondMenu->id_menu);
+										$thirdMenu  	= $this->_ci->t_hak_akses_model->showData($whereThirdMenu );
+										
+										//echo $this->_ci->db->last_query();
+										
+										$menuHtml		.=	'<ul class="dropdown-menu pull-left">';
+											foreach($thirdMenu as $dataThirdMenu){
+												$cekDownlineThirdMenu = $this->cek_downline_menu( $dataThirdMenu->id_menu );
+												
+												if($cekDownlineThirdMenu == '0'){
+													$urlThirdMenu	=	base_url()."".$dataThirdMenu->link_menu;
+													$classThirdMenuHref	=	"nav-link";
+													$classThirdMenuLi		=	"";
+													
+												}
+												else{
+													$urlThirdMenu			=	"javascript:;";
+													$classThirdMenuLi		=	"menu-dropdown classic-menu-dropdown";
+													$classThirdMenuHref	=	"";
+												}
+								
+												$menuHtml .= "
+												<li aria-haspopup='true' class='".$classThirdMenuLi."'>
+													<a href='".$urlThirdMenu."' class='".$classThirdMenuHref."'>
+														<i class='fa fa-arrows-h'></i> ".$dataThirdMenu->nm_menu."
+													</a>
+												";					
+												
+												$menuHtml .= "
+												</li>
+												";
+											}
+										$menuHtml .= "
+										</ul>
+										";
+									}
+								$menuHtml .= "
+								</li>
+								";
+							}
+						$menuHtml .= "
+						</ul>
+						";
+					}
+				$menuHtml .= "
+				</li>
+				";
+			}
+			
+			
+		echo $menuHtml;
+	
+	}
+
+}

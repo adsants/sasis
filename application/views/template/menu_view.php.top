@@ -1,0 +1,23 @@
+<div class="page-header-menu">
+	<div class="container">
+				
+	
+		<div class="hor-menu  ">
+			<ul class="nav navbar-nav">
+			
+			
+				<?=$this->template_view->load_menu($this->session->userdata('id_kategori_user'));?>
+				
+				<li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown">
+					<a onclick="show_confirmation_modal('Apakah anda yakin akan keluar ..?','<?=base_url();?>logout')"> 
+						<i class="fa fa-lock"></i> Logout
+					</a>			
+				</li>
+				 
+			</ul>
+			
+		</div>
+		<!-- END MEGA MENU -->
+
+	</div>
+</div>

@@ -1,0 +1,7 @@
+kasih delete siswa di ujian
+cetak kartu ujian di export word
+cetak kartu ujian dalam bentuk excel --> nip nama kelas password -> excel
+
+memberi password xampp hanya database
+
+cek laporan karena ada yang bisa dihapus
