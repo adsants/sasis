@@ -169,7 +169,8 @@ class Bank_soal extends CI_Controller {
 			$like		=	$this->input->get('search');			
 		}
 
-		$config['base_url'] 	= base_url().'backoffice/'.$this->uri->segment(2).'/index'.$urlSearch;
+		
+		$config['base_url'] 	= base_url().'backoffice/'.$this->uri->segment(2).'/soal?id_m_paket_soal='.$this->input->get('id_m_paket_soal').'&'.$urlSearch;
 		
 		$where = array('m_soal.id_m_paket_soal' => $this->input->get('id_m_paket_soal'));
 		

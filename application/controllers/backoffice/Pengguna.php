@@ -201,5 +201,27 @@ class Pengguna extends CI_Controller {
 		
 	}
 	
+	
+
+	public function delete($primaryKey = null){
+		
+		/// cek Hak Akses (security)
+		$this->hak_akses->cek_delete($this->uri->segment(2));
+		
+		if(!$primaryKey){			
+			redirect($this->template_view->base_url_admin()."/".$this->uri->segment('2'));
+		}				
+		
+		$returnUpdate 				= $this->m_user_model->delete($primaryKey);
+		
+		if($returnUpdate){
+			$this->notice->success("Proses Penghapusan Data User berhasil.");			
+		}
+		else{
+			$this->notice->warning("Proses Penghapusan Data User Gagal, silahkan ulangi lagi.");	
+		}				
+		redirect($this->template_view->base_url_admin()."/".$this->uri->segment('2'));
+	}
+	
 
 }
