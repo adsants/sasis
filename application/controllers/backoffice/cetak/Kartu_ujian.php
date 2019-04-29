@@ -83,7 +83,16 @@ class Kartu_ujian extends CI_Controller {
 			$this->load->model('profil_aplikasi_model');	
 			$this->dataProfilAplikasi = $this->profil_aplikasi_model->getData();
 		
-			$this->load->view('cetak/kartu_ujian_view');
+			$html = $this->load->view('cetak/kartu_ujian_view',array() , true);
+
+			
+			$this->load->helper('pdf_helper');
+			$mpdf = new \Mpdf\Mpdf();
+			//$mpdf = new mPDF(
+
+			$mpdf->SetTitle('Hasil Ujian');
+			$mpdf->WriteHTML($html);
+			$mpdf->Output('Hasil Ujian.pdf', 'I');    
 		
 		}
 		

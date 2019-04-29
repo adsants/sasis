@@ -1,22 +1,17 @@
 
-<?php
-if($this->input->get('jenis') == 'word'){
-header("Content-Type: application/vnd.ms-word");
-header("Expires: 0");
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("content-disposition: attachment;filename=kartu-Ujian.doc");
-?>
-
 <style>
+@page {
+     margin: 20px 10px;
+    }
 tr td{
 	font-family:Arial, Helvetica, sans-serif;
 }
 .kta{
 	width:85mm;
-	height:55mm;
+	height:60mm;
 	border:1px solid #333;
 	float:left;
-	margin-right:20px;
+	margin-left:20px;
 	margin-bottom:20px;
 }
 .identiti tr td{
@@ -79,11 +74,11 @@ foreach($this->siswaKelas as $dataSiswa){
         <td width="6%" align="center">:</td>
         <td><?=$dataSiswa->nipd;?></td>
       </tr>
-	   <tr>
+	   <tr >
         <td >&nbsp;</td>
-        <td align="right">Nama</td>
-        <td align="center">:</td>
-        <td><?=$dataSiswa->nama;?></td>
+        <td valign=top  align="right">Nama</td>
+        <td valign=top align="center">:</td>
+        <td valign=top ><?=$dataSiswa->nama;?></td>
       </tr>
       <tr>
         <td>&nbsp;</td>
@@ -106,8 +101,4 @@ foreach($this->siswaKelas as $dataSiswa){
 
 </div>
 <?php if($break%8==0){ echo "<div style='page-break-after:always'></div>";} $break++; } ?>
-<?php
-}
 
-
-?>

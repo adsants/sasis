@@ -43,13 +43,13 @@
 							
 							</div>
 							<div class="col-md-6">	
-								<!--
+								
 								<a href="<?=$this->template_view->base_url_admin();?>/cetak/kartu_ujian/index/<?=$this->dataUjian->id_m_ujian;?>?jenis=word" target="_blank" >
 								<span class="btn btn-warning text-right">
-									<i class="fa fa-file-word-o"></i> Export Word Semua Siswa
+									<i class="fa fa-file-word-o"></i> Export PDF Semua Siswa
 								</span>
 								</a>
-								-->
+								
 								&nbsp;&nbsp;
 								<a href="<?=$this->template_view->base_url_admin();?>/cetak/kartu_ujian/index/<?=$this->dataUjian->id_m_ujian;?>?jenis=excel" target="_blank" >
 								<span class="btn btn-success text-right">

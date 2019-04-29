@@ -15,7 +15,7 @@
 					<div class="portlet light">
 						<div class="portlet-title">
 							<div class="caption">
-								<?=$this->hak_akses->btn_add($this->uri->segment('2'));?>
+								<!--<?=$this->hak_akses->btn_add($this->uri->segment('2'));?>-->
 							</div>
 							<div class="inputs">
 								<div class="portlet-input input-inline input-large">

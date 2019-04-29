@@ -15,7 +15,7 @@ class Admin extends CI_Controller {
 		
 		
 		$oke = $this->db->query('show variables like "max_connections"')->row();
-		//var_dump($oke );
+		
 		if($oke->Value < 3000){
 			$this->db->query('set global max_connections = 3000;');
 		}
