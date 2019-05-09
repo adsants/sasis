@@ -489,6 +489,8 @@ class Bank_soal extends CI_Controller {
 		}				
 		redirect($this->template_view->base_url_admin()."/".$this->uri->segment('2')."/soal?id_m_paket_soal=".$id_paket_soal);
 	}
+	/***
+	Lama
 	public function export(){		
 		/// cek Hak Akses (security)
 		$this->hak_akses->cek_add($this->uri->segment(2));
@@ -499,6 +501,86 @@ class Bank_soal extends CI_Controller {
 		
 		$dataPaket 	= $this->m_paket_soal_model->getData( $this->input->get('id_m_paket_soal'));
 		$dataSoal 	= $this->m_soal_model->showData(array('m_soal.id_m_paket_soal' => $this->input->get('id_m_paket_soal')));
+		
+		if(!$dataPaket){
+			redirect($this->template_view->base_url_admin()."/".$this->uri->segment('2'));
+		}
+		else{
+			
+			$result = array();
+			$i = 0;
+			foreach($dataSoal as $row){
+
+				$result[] = array(
+					'id_m_soal' 		=> $row->id_m_soal ,
+					'soal' 				=> $row->soal,
+					'jenis_soal' 		=> $row->jenis_soal,
+					'jml_jawaban' 		=> $row->jml_jawaban,
+					'type_file_soal' 	=> $row->type_file_soal,
+					'file_soal' 		=> $row->file_soal,
+					'status_soal' 		=> $row->status_soal,
+					'kategori_soal' 	=> $row->kategori_soal,
+					'data_jawaban' => array()
+				);
+				
+				$dataJawaban = $this->m_jawaban_model->showData(array('m_jawaban.id_m_soal' => $row->id_m_soal));
+				
+				foreach($dataJawaban as $rowJawaban){
+				
+					$result[$i]['data_jawaban'][] = array(
+						'id_m_jawaban' 		=> $rowJawaban->id_m_jawaban,
+						'jawaban' 			=> $rowJawaban->jawaban,
+						'id_m_soal' 		=> $rowJawaban->id_m_soal,
+						'status' 			=> $rowJawaban->status
+					);
+					
+					$result = array_values($result); 
+				}
+
+			$i++;
+			}
+			$formattedData = json_encode($result);
+			
+
+			//echo $formattedData;exit();
+
+			$name = str_replace(' ','_',$dataPaket->nm_paket_soal);
+			$nameMapel = str_replace(' ','_',$dataPaket->nm_mata_pelajaran);
+
+			$filename = $nameMapel."-".$name.'.json';
+
+			$this->load->helper('download');
+			force_download($filename, $formattedData);
+		}
+	}
+	**/
+	
+	public function export(){		
+		/// cek Hak Akses (security)
+		$this->hak_akses->cek_add($this->uri->segment(2));
+	
+		if(!$this->input->get('id_m_paket_soal')){			
+			redirect($this->template_view->base_url_admin()."/".$this->uri->segment('2'));
+		}	
+		
+		$dataPaket 	= $this->m_paket_soal_model->getData( $this->input->get('id_m_paket_soal'));
+		
+		$i = 1;
+		$dataIdSoal	=	"";
+		foreach($this->input->post('id_m_soal') as $id_soal){
+			if($i != 1){
+				$dataIdSoal .= ",'".$id_soal."'";
+			}
+			else{
+				$dataIdSoal .= "'".$id_soal."'";
+			}
+			
+		$i++;	
+		}
+		
+		$dataSoal 	= $this->m_soal_model->showData(array("m_soal.id_m_soal in (".$dataIdSoal.")" => null));
+		
+		//echo $this->db->last_query();exit();
 		
 		if(!$dataPaket){
 			redirect($this->template_view->base_url_admin()."/".$this->uri->segment('2'));

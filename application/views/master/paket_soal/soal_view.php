@@ -31,9 +31,10 @@
 								<a href="<?=$this->template_view->base_url_admin();?>/<?=$this->uri->segment('2');?>/import/?id_m_paket_soal=<?=$this->dataPaketSoal->id_m_paket_soal;?>" class="pull-right">
 									<span class="btn btn-warning"><i class="fa fa-download"></i> Import Data </span>
 								</a>
-								<a href="<?=$this->template_view->base_url_admin();?>/<?=$this->uri->segment('2');?>/export/?id_m_paket_soal=<?=$this->dataPaketSoal->id_m_paket_soal;?>" target="_blank" class="pull-right" style="margin-right:10px;">
+								<!--<a href="<?=$this->template_view->base_url_admin();?>/<?=$this->uri->segment('2');?>/export/?id_m_paket_soal=<?=$this->dataPaketSoal->id_m_paket_soal;?>" target="_blank" class="pull-right" style="margin-right:10px;">
 									<span class="btn btn-success"><i class="fa fa-upload"></i> Export Data </span>
-								</a>
+								</a>-->
+								<span class="btn btn-success pull-right" onclick="export_soal()" style="margin-right:10px;"><i class="fa fa-upload"></i> Export Data </span>
 							</div>
 							</div>
 							<br>
@@ -41,10 +42,13 @@
 						<div class="portlet-body">
 							<?php if($this->session->notice){echo $this->session->notice;} ?>
 							<div class="table-scrollable">
+								<form method="post" action="<?=$this->template_view->base_url_admin();?>/<?=$this->uri->segment('2');?>/export/?id_m_paket_soal=<?=$this->dataPaketSoal->id_m_paket_soal;?>" name="form_export" id="form_export">
 								<table class="table table-striped table-bordered table-hover">
 									<thead>
 										<tr>
-											<th scope="col">No</th>
+											<th scope="col">No<br>
+											<input type="checkbox" id="selectAll" /> 
+											</th>
 											<th scope="col"> Soal</th>
 										
 											<th scope="col"></th>
@@ -57,7 +61,11 @@
 										foreach($this->showData as $data){
 										?>
 										<tr>
-											<td align='center'><?=$no;?>.</td>
+											<td align='center'><?=$no;?>.
+											<br>
+											<input type="checkbox" name="id_m_soal[]" value="<?=$data->id_m_soal;?>"/>
+											
+											</td>
 											<td><?=$data->soal;?> </td>
 											<td>
 												<?php 
@@ -97,6 +105,7 @@
 										?>
 									</tbody>
 								</table>
+								</form>
 							</div>
 
 								<center>
@@ -113,8 +122,56 @@
 	</div>
 </div>
 
+
+<div id="modal_export" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+	<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">			
+				<h4 class="modal-title">Pesan Konfirmasi</h4>
+			</div>
+			<div class="modal-body">
+				
+				Apakah anda yakin akan Export Data soal terpilih  ..?
+				
+			</div>
+			<div class="modal-footer">
+				<div class="pull-left">
+					<span class="btn btn-warning" data-dismiss="modal">Tidak</span >
+				</div>
+					<span class="btn btn-primary" onclick="export_soal_ya()">Ya</span>
+			</div>
+		</div>
+
+	</div>
+</div>
+
 <script>
 	function change_mapel(){
 		location.href='?id_m_mata_pelajaran='+$('#id_m_mata_pelajaran').val();
+	}
+	
+	
+	$('#selectAll').click(function(e){
+		var table= $(e.target).closest('table');
+		$('td input:checkbox',table).prop('checked',this.checked);
+	});
+	
+	function export_soal(){
+		
+		var checkedNum = $('input[name="id_m_soal[]"]:checked').length;
+		if (!checkedNum) {
+			alert('Silahkan pilih dahulu Soal yang akan diExport.');
+		}
+		else{
+			$("#modal_export").modal('show'); 
+		}
+		
+	}
+	
+	function export_soal_ya(){
+		$("#form_export").submit();
+			$("#modal_export").modal('hide'); 
 	}
 </script>
