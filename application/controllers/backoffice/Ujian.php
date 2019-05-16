@@ -556,8 +556,8 @@ class Ujian extends CI_Controller {
 				//$data['jml_soal_esay'] 			= $this->input->post('jml_soal_esay');
 				
 				**/
-				
-				$data['tampilkan_hasil_jawaban'] = $this->input->post('tampilkan_hasil_jawaban');
+				$data['tampilkan_nilai'] 			= $this->input->post('tampilkan_nilai');
+				$data['tampilkan_hasil_jawaban'] 	= $this->input->post('tampilkan_hasil_jawaban');
 				//$data['keterangan_ujian'] 		= $this->input->post('keterangan_ujian');	
 				
 				//$data['token_ujian'] 			= $this->encrypt_decrypt->generateRandomString(4);				

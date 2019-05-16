@@ -88,7 +88,7 @@ class Lap_nilai extends CI_Controller {
 						<td>".$dataSiswa->nipd." </td>
 						<td>".$dataSiswa->nama."</td>
 						<td>".$dataSiswa->kelas." </td>
-						<td>".$this->template_view->cek_nilai($dataSiswa->id_detail_siswa_paket_ujian)."</td>
+						<td>".$this->template_view->nilai_decimal($dataSiswa->nilai)."</td>
 						<td>".$this->template_view->waktu_pengerjaan_ujian($dataSiswa->id_detail_siswa_paket_ujian)."</td>
 					</tr>
 					";
@@ -178,7 +178,7 @@ class Lap_nilai extends CI_Controller {
 												$this->dataNilaiSiswa 	= $this->detail_siswa_paket_ujian_model->getData(array("detail_siswa_paket_ujian.id_m_siswa_paket_ujian" => $dataSiswa->id_m_siswa_paket_ujian , 'detail_siswa_paket_ujian.id_m_ujian_mapel' => $dataMapel->id_m_ujian_mapel));
 												
 												$this->tableHtml .= '
-													<td>'.$this->template_view->cek_nilai($this->dataNilaiSiswa->id_detail_siswa_paket_ujian).'</td>
+													<td>'.$this->template_view->nilai_decimal($this->dataNilaiSiswa->nilai).'</td>
 												';
 												
 												
@@ -187,7 +187,7 @@ class Lap_nilai extends CI_Controller {
 											$this->dataNilaiSiswaKeseluruhan 	= $this->detail_siswa_paket_ujian_model->nilaiAllMapel(array("detail_siswa_paket_ujian.id_m_siswa_paket_ujian" => $dataSiswa->id_m_siswa_paket_ujian ));
 												
 											$this->tableHtml .= '
-												<td>'.$this->dataNilaiSiswaKeseluruhan->nilai.'</td>
+												<td>'.$this->template_view->nilai_decimal($this->dataNilaiSiswaKeseluruhan->nilai).'</td>
 											';	
 												
 												
