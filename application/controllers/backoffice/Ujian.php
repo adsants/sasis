@@ -1037,7 +1037,7 @@ class Ujian extends CI_Controller {
 							<thead>
 								<tr>
 									<th scope="col" colspan="6">
-										Kategori Mudah
+										Kategori Sulit
 									</th>
 								</tr>
 								<tr>
@@ -1666,10 +1666,10 @@ class Ujian extends CI_Controller {
 								if($insertDataPaketSoalForSiswa->jumlah_soal_ganda_sulit > 0){
 									if($insertDataPaketSoalForSiswa->jumlah_soal_ganda_sulit == 'Y'){
 										
-										$dataSoalForSoalSiswa = $this->m_soal_model->soalRandomDanTidak(array('m_soal.id_m_paket_soal' => $insertDataPaketSoalForSiswa->id_m_paket_soal, 'm_soal.kategori_soal' => 'SL'), $insertDataPaketSoalForSiswa->jumlah_soal_ganda_sedang , 'Y','G');
+										$dataSoalForSoalSiswa = $this->m_soal_model->soalRandomDanTidak(array('m_soal.id_m_paket_soal' => $insertDataPaketSoalForSiswa->id_m_paket_soal, 'm_soal.kategori_soal' => 'SL'), $insertDataPaketSoalForSiswa->jumlah_soal_ganda_sulit , 'Y','G');
 									}
 									else{
-										$dataSoalForSoalSiswa = $this->m_soal_model->soalRandomDanTidak(array('m_soal.id_m_paket_soal' => $insertDataPaketSoalForSiswa->id_m_paket_soal, 'm_soal.kategori_soal' => 'SL'), $insertDataPaketSoalForSiswa->jumlah_soal_ganda_sedang ,null,'G');
+										$dataSoalForSoalSiswa = $this->m_soal_model->soalRandomDanTidak(array('m_soal.id_m_paket_soal' => $insertDataPaketSoalForSiswa->id_m_paket_soal, 'm_soal.kategori_soal' => 'SL'), $insertDataPaketSoalForSiswa->jumlah_soal_ganda_sulit ,null,'G');
 									}
 									
 									foreach($dataSoalForSoalSiswa as $soalInsert){
