@@ -568,7 +568,6 @@ class Ujian extends CI_Controller {
 			$this->load->model('detail_siswa_paket_ujian_model');		
 			$this->load->model('soal_siswa_model');		
 			
-
 			
 			$cekStatus	=	$this->detail_siswa_paket_ujian_model->getDataForUjian(array('detail_siswa_paket_ujian.id_detail_siswa_paket_ujian' => $this->input->post('id_detail_siswa_paket_ujian')));
 			
@@ -576,10 +575,7 @@ class Ujian extends CI_Controller {
 				$status = array('status' => false , 'pesan' => "<div class='alert alert-warning'>Proses simpan Gagal, Anda Sudah melakukan Ujian <br><a href='".$this->template_view->base_url_siswa()."/dashboard'>Kembali ke Beranda</a></div>",'sudah_ujian' => true);
 			}
 			else{	
-				$soalBelumJawab	=	$this->soal_siswa_model->getData(array('soal_siswa.time_stamp is null' => null, 'soal_siswa.id_detail_siswa_paket_ujian' => $this->input->post('id_detail_siswa_paket_ujian')));				
-				
-				$soalRagu	=	$this->soal_siswa_model->getData(array('soal_siswa.ragu_ragu' => 'Y', 'soal_siswa.id_detail_siswa_paket_ujian' => $this->input->post('id_detail_siswa_paket_ujian')));				
-							
+				$soalBelumJawab	=	$this->soal_siswa_model->getData(array('soal_siswa.time_stamp is null' => null, 'soal_siswa.id_detail_siswa_paket_ujian' => $this->input->post('id_detail_siswa_paket_ujian')));					
 				
 				if($soalBelumJawab){	
 					$this->idSoalSiswaPertama	= $this->soal_siswa_model->getData(array('id_detail_siswa_paket_ujian' => $this->input->post('id_detail_siswa_paket_ujian') ),"","id_soal_siswa asc");		
@@ -588,16 +584,21 @@ class Ujian extends CI_Controller {
 					
 					$status = array('status' => false , 'pesan' => "<div class='alert alert-warning'>Soal Nomor <b>".$nomor_soal."</b> masih Belum dijawab, Anda masih memiliki waktu untuk mengerjakan Ujian. Silahkan Jawab soal tersebut terlebih dahulu dengan Klik Tombol Tidak.</div>", 'belum_semua' => true);
 				}
-				elseif($soalRagu){
-					
-					$this->idSoalSiswaPertama	= $this->soal_siswa_model->getData(array('id_detail_siswa_paket_ujian' => $this->input->post('id_detail_siswa_paket_ujian') ),"","id_soal_siswa asc");		
-					
-					$nomor_soal = ($soalRagu->id_soal_siswa - $this->idSoalSiswaPertama->id_soal_siswa ) + 1;
-					
-					$status = array('status' => false , 'pesan' => "<div class='alert alert-warning'>jawaban Soal Nomor <b>".$nomor_soal."</b> masih Ragu-Ragu. Anda masih memiliki waktu untuk mengecek kembali Jawaban anda. Jika tidak, silahkan anda klik Selesai.</div>" ,  'ragu' => true);
-				}
 				else{
-					$status = array('status' => true);
+					
+					$soalRagu	=	$this->soal_siswa_model->getData(array('soal_siswa.ragu_ragu' => 'Y', 'soal_siswa.id_detail_siswa_paket_ujian' => $this->input->post('id_detail_siswa_paket_ujian')));				
+					
+					if($soalRagu){
+					
+						$this->idSoalSiswaPertama	= $this->soal_siswa_model->getData(array('id_detail_siswa_paket_ujian' => $this->input->post('id_detail_siswa_paket_ujian') ),"","id_soal_siswa asc");		
+						
+						$nomor_soal = ($soalRagu->id_soal_siswa - $this->idSoalSiswaPertama->id_soal_siswa ) + 1;
+						
+						$status = array('status' => false , 'pesan' => "<div class='alert alert-warning'>jawaban Soal Nomor <b>".$nomor_soal."</b> masih Ragu-Ragu. Anda masih memiliki waktu untuk mengecek kembali Jawaban anda. Jika tidak, silahkan anda klik Selesai.</div>" ,  'ragu' => true);
+					}
+					else{
+						$status = array('status' => true);
+					}					
 				}
 			}				
 		}	

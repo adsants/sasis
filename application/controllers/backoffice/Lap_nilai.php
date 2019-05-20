@@ -12,6 +12,7 @@ class Lap_nilai extends CI_Controller {
 		$this->session_lib->admin();
 		
 		$this->load->model('m_ujian_model');
+		$this->load->model('soal_siswa_model');
 	} 
 
 	public function index(){		
@@ -80,7 +81,7 @@ class Lap_nilai extends CI_Controller {
 			$no=1;
 			foreach($this->dataSiswa as $dataSiswa){
 				
-					
+					$jumlahNilai	=	$this->soal_siswa_model->sumNilai(array('id_detail_siswa_paket_ujian' => $dataSiswa->id_detail_siswa_paket_ujian));
 				
 				$this->dataNilai .= "
 					<tr>
@@ -88,11 +89,15 @@ class Lap_nilai extends CI_Controller {
 						<td>".$dataSiswa->nipd." </td>
 						<td>".$dataSiswa->nama."</td>
 						<td>".$dataSiswa->kelas." </td>
-						<td>".$this->template_view->nilai_decimal($dataSiswa->nilai)."</td>
+						<td>".$jumlahNilai->nilai."</td>
 						<td>".$this->template_view->waktu_pengerjaan_ujian($dataSiswa->id_detail_siswa_paket_ujian)."</td>
 					</tr>
 					";
+				
+				$dataUpdateSiswaUjian['nilai']	=	$jumlahNilai->nilai;				
+				$this->detail_siswa_paket_ujian_model->update(array( 'id_detail_siswa_paket_ujian' => $dataSiswa->id_detail_siswa_paket_ujian),$dataUpdateSiswaUjian);	
 			
+
 			$no++;
 			}
 			
